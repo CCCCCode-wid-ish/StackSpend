@@ -7,6 +7,7 @@ import CTA from "@/components/cta";
 import Footer from "@/components/footer";
 import SpendForm from "@/components/spend-form";
 
+
 export default function Home() {
   return (
     <main className="bg-black text-white min-h-screen overflow-x-hidden">
