@@ -1,22 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { generateAudit } from "@/lib/audit-engine";
 
 const schema = z.object({
-  tool: z.string().min(1, "Tool is required"),
-  plan: z.string().min(1, "Plan is required"),
-  spend: z.coerce.number().min(0, "Spend cannot be negative"),
-  seats: z.coerce.number().min(1, "Minimum 1 seat required"),
-  teamSize: z.coerce.number().min(1, "Team size must be at least 1"),
-  useCase: z.string().min(1, "Use case is required"),
+  tool: z.string().min(1),
+  plan: z.string().min(1),
+  spend: z.coerce.number().min(0),
+  seats: z.coerce.number().min(1),
+  teamSize: z.coerce.number().min(1),
+  useCase: z.string().min(1),
 });
 
 type FormData = z.infer<typeof schema>;
 
 export default function SpendForm() {
+  const [result, setResult] = useState<any>(null);
+
   const {
     register,
     handleSubmit,
@@ -26,87 +29,63 @@ export default function SpendForm() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem("audit-form");
-
-    if (saved) {
-      console.log("Loaded:", JSON.parse(saved));
-    }
+    const saved = localStorage.getItem("audit-result");
+    if (saved) setResult(JSON.parse(saved));
   }, []);
 
   const onSubmit = (data: FormData) => {
-    localStorage.setItem("audit-form", JSON.stringify(data));
-    console.log("Saved:", data);
+    const auditResult = generateAudit(data);
+
+    setResult(auditResult);
+
+    localStorage.setItem(
+      "audit-result",
+      JSON.stringify(auditResult)
+    );
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="max-w-3xl mx-auto bg-zinc-900 p-8 rounded-3xl border border-zinc-800"
-    >
-      <h2 className="text-3xl font-bold mb-8">AI Spend Audit</h2>
+    <div className="max-w-3xl mx-auto">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800"
+      >
+        <h2 className="text-3xl font-bold mb-8">
+          AI Spend Audit
+        </h2>
 
-      <div className="grid gap-6">
-        <input
-          {...register("tool")}
-          placeholder="Tool Name"
-          className="bg-black border border-zinc-700 p-4 rounded-xl"
-        />
-        {errors.tool && <p className="text-red-500">{errors.tool.message}</p>}
+        <div className="grid gap-6">
+          <input {...register("tool")} placeholder="Tool Name" />
+          <input {...register("plan")} placeholder="Plan" />
+          <input type="number" {...register("spend")} placeholder="Monthly Spend" />
+          <input type="number" {...register("seats")} placeholder="Seats" />
+          <input type="number" {...register("teamSize")} placeholder="Team Size" />
 
-        <input
-          {...register("plan")}
-          placeholder="Plan"
-          className="bg-black border border-zinc-700 p-4 rounded-xl"
-        />
-        {errors.plan && <p className="text-red-500">{errors.plan.message}</p>}
+          <select {...register("useCase")}>
+            <option value="">Select Use Case</option>
+            <option value="coding">Coding</option>
+            <option value="writing">Writing</option>
+            <option value="research">Research</option>
+            <option value="mixed">Mixed</option>
+          </select>
 
-        <input
-          type="number"
-          {...register("spend")}
-          placeholder="Monthly Spend"
-          className="bg-black border border-zinc-700 p-4 rounded-xl"
-        />
-        {errors.spend && <p className="text-red-500">{errors.spend.message}</p>}
+          <button type="submit">
+            Run Audit
+          </button>
+        </div>
+      </form>
 
-        <input
-          type="number"
-          {...register("seats")}
-          placeholder="Seats"
-          className="bg-black border border-zinc-700 p-4 rounded-xl"
-        />
-        {errors.seats && <p className="text-red-500">{errors.seats.message}</p>}
+      {result && (
+        <div className="mt-10 bg-zinc-900 p-6 rounded-xl">
+          <h2>Audit Result</h2>
 
-        <input
-          type="number"
-          {...register("teamSize")}
-          placeholder="Team Size"
-          className="bg-black border border-zinc-700 p-4 rounded-xl"
-        />
-        {errors.teamSize && (
-          <p className="text-red-500">{errors.teamSize.message}</p>
-        )}
-
-        <select
-          {...register("useCase")}
-          className="bg-black border border-zinc-700 p-4 rounded-xl"
-        >
-          <option value="">Select Use Case</option>
-          <option value="coding">Coding</option>
-          <option value="writing">Writing</option>
-          <option value="research">Research</option>
-          <option value="mixed">Mixed</option>
-        </select>
-        {errors.useCase && (
-          <p className="text-red-500">{errors.useCase.message}</p>
-        )}
-
-        <button
-          type="submit"
-          className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold hover:scale-105 transition"
-        >
-          Run Audit
-        </button>
-      </div>
-    </form>
+          <p>Tool: {result.tool}</p>
+          <p>Spend: ${result.currentSpend}</p>
+          <p>Plan: {result.recommendedPlan}</p>
+          <p>Savings: ${result.savings}</p>
+          <p>{result.reason}</p>
+        </div>
+      )}
+    </div>
   );
 }
