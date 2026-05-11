@@ -1,3 +1,5 @@
+"use client";
+
 // Imports React hooks for state and side effects
 import { useEffect, useState } from "react";
 
@@ -19,10 +21,13 @@ type Props = {
 // Main dashboard component
 export default function ResultsDashboard({ result }: Props) {
 
-    // Stores AI summary message
-    
-    //FETCH SUMMARY IN DASHBOARD
+  // Stores AI summary message
   const [summary, setSummary] = useState("");
+
+  // Stores lead form fields
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
 
   // Runs whenever result data changes
   useEffect(() => {
@@ -66,6 +71,21 @@ export default function ResultsDashboard({ result }: Props) {
     fetchSummary();
 
   }, [result]);
+
+  // Saves lead data
+  async function saveLead() {
+
+    const leadData = {
+      email,
+      company,
+      role,
+      result,
+    };
+
+    console.log("Lead Saved:", leadData);
+
+    alert("Lead information saved successfully!");
+  }
 
   // Calculates yearly savings
   const annualSavings = result.savings * 12;
@@ -211,6 +231,52 @@ export default function ResultsDashboard({ result }: Props) {
             </BarChart>
 
           </ResponsiveContainer>
+
+        </div>
+
+      </div>
+
+      {/* LEAD CAPTURE FORM */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+
+        {/* Lead form heading */}
+        <h2 className="text-2xl font-bold mb-6">
+          Get Full Optimization Report
+        </h2>
+
+        {/* Lead form inputs */}
+        <div className="grid gap-4">
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-black border border-zinc-700 p-4 rounded-xl"
+          />
+
+          <input
+            type="text"
+            placeholder="Company"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            className="bg-black border border-zinc-700 p-4 rounded-xl"
+          />
+
+          <input
+            type="text"
+            placeholder="Role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="bg-black border border-zinc-700 p-4 rounded-xl"
+          />
+
+          <button
+            onClick={saveLead}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold"
+          >
+            Save Report
+          </button>
 
         </div>
 
