@@ -91,19 +91,37 @@ Improve the audit result dashboard UI with better visual hierarchy and clearer s
 **Hours worked:** 6
 
 **What I did:**  
-Built the audit results dashboard for the AI Spend Audit tool. Added a savings hero section displaying monthly and yearly savings in a visually prominent format. Created a recommendation breakdown card showing the current spend, recommended plan, estimated savings, and reasoning behind the optimization suggestions.
+Continued improving the AI Spend Audit dashboard and began implementing backend-oriented product features to make the application behave more like a real SaaS platform.
 
-Integrated Recharts to start building data visualizations comparing current AI spend vs optimized spend. Improved the overall dashboard UI with a modern SaaS-style dark theme using gradients, spacing, and card-based layouts.
+Worked on integrating Supabase for audit report storage and started preparing dynamic public report generation using unique report IDs. Structured the project to support shareable audit URLs and database persistence for audit data.
 
-Connected the audit engine output with the frontend results dashboard so audit results now render dynamically after form submission. Also worked on improving state persistence using localStorage.
+Improved the frontend dashboard experience by refining the savings hero section, recommendation cards, and analytics layout. Enhanced the chart visualization setup using Recharts to compare current spend versus optimized spend more clearly.
+
+Added localStorage persistence improvements so audit data remains available even after refreshing the page. Continued modularizing the application by separating form handling, dashboard rendering, audit logic, and backend integration into reusable components.
+
+Also worked on integrating dynamic report routing structure inside the Next.js App Router architecture and preparing the foundation for lead capture functionality.
+
 
 **What I learned:**  
-Learned how to structure a reusable dashboard component in React and how to pass audit result data cleanly between components. Understood how chart libraries like Recharts simplify data visualization for SaaS dashboards.
+Learned how frontend dashboards connect with backend services using Supabase and how SaaS applications structure public report systems using dynamic routes.
 
-Also learned more about JSX structure and debugging component nesting issues in Next.js.
+Improved understanding of state persistence, reusable component architecture, and database-driven workflows in Next.js applications. Also learned more about managing client-side rendering behavior and structuring scalable React applications.
+
+Understood how analytics dashboards combine visualization, business logic, persistence, and routing to create a more production-like user experience.
 
 **Blockers / what I'm stuck on:**  
-Faced hydration warnings and JSX structure issues due to incorrect component nesting and browser-injected attributes. Spent time debugging render issues and fixing component hierarchy.
+Encountered issues with Supabase environment variable configuration and dynamic route setup while integrating backend functionality.
+
+Also spent time debugging hydration warnings, JSX nesting issues, and client/server rendering mismatches in Next.js.
+
+Still need to complete:
+
+AI-generated personalized summaries
+Public report page rendering
+Lead capture database integration
+Open Graph metadata for report previews
+Multi-tool audit support
+Better dashboard responsiveness and chart polish
 
 Still need to complete:
 - AI-generated personalized summary
@@ -112,7 +130,7 @@ Still need to complete:
 - Shareable public audit URLs
 
 **Plan for tomorrow:**  
-Integrate AI-generated summaries using an LLM API with fallback handling. Improve dashboard polish further and begin backend setup for lead capture and database storage.
+Complete Supabase database integration and dynamic public report pages. Implement lead capture forms with email/company persistence and continue improving dashboard polish, AI summaries, and overall SaaS-style user experience.
 
 
 

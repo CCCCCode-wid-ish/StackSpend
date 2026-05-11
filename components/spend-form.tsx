@@ -19,7 +19,7 @@ import { generateAudit } from "@/lib/audit-engine";
 // Imports dashboard component
 import ResultsDashboard from "./results-dashboard";
 
-
+// Imports Supabase client
 import { supabase } from "@/lib/supabase";
 
 // Creates validation rules for form fields
@@ -55,6 +55,8 @@ export default function SpendForm() {
   // Stores audit result
   const [result, setResult] = useState<any>(null);
 
+  // Stores generated public report URL
+  const [reportLink, setReportLink] = useState("");
 
   // Initializes React Hook Form
   const {
@@ -88,37 +90,56 @@ export default function SpendForm() {
 
 
   // Runs when form is submitted
- const onSubmit = async (data: FormData) => {
-  const auditResult = generateAudit(data);
+  const onSubmit = async (data: FormData) => {
 
-  setResult(auditResult);
+    // Generates audit result
+    const auditResult = generateAudit(data);
 
-  localStorage.setItem(
-    "audit-result",
-    JSON.stringify(auditResult)
-  );
+    // Stores result in state
+    setResult(auditResult);
 
-  const { data: savedAudit, error } = await supabase
-    .from("audits")
-    .insert([
-      {
-        tool: auditResult.tool,
-        current_spend: auditResult.currentSpend,
-        recommended_plan: auditResult.recommendedPlan,
-        savings: auditResult.savings,
-        reason: auditResult.reason,
-      },
-    ])
-    .select()
-     .single();
-   if (savedAudit) {
-  const reportUrl = `/report/${savedAudit.id}`;
+    // Saves result to local storage
+    localStorage.setItem(
+      "audit-result",
+      JSON.stringify(auditResult)
+    );
 
-  console.log(reportUrl);
-}
+    // Saves audit into Supabase database
+    const { data: savedAudit, error } = await supabase
+      .from("audits")
+      .insert([
+        {
+          tool: auditResult.tool,
+          current_spend: auditResult.currentSpend,
+          recommended_plan: auditResult.recommendedPlan,
+          savings: auditResult.savings,
+          reason: auditResult.reason,
+        },
+      ])
+      .select()
+      .single();
 
-  console.log(savedAudit);
-};
+    // Shows error if database save fails
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    // Creates public report URL
+    if (savedAudit) {
+
+      // Generates dynamic report link
+      const reportUrl = `/report/${savedAudit.id}`;
+
+      // Stores link in state
+      setReportLink(reportUrl);
+
+      // Logs report URL
+      console.log(reportUrl);
+    }
+
+    // Logs saved audit object
+    console.log(savedAudit);
   };
 
 
@@ -148,72 +169,131 @@ export default function SpendForm() {
         <div className="grid gap-6">
 
           {/* Tool input */}
-          <input
-            {...register("tool")}
-            placeholder="Tool Name"
-          />
+          <div>
+            <input
+              {...register("tool")}
+              placeholder="Tool Name"
+              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
+            />
+
+            {errors.tool && (
+              <p className="text-red-500 mt-2">
+                Tool is required
+              </p>
+            )}
+          </div>
 
           {/* Plan input */}
-          <input
-            {...register("plan")}
-            placeholder="Plan"
-          />
+          <div>
+            <input
+              {...register("plan")}
+              placeholder="Plan"
+              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
+            />
+
+            {errors.plan && (
+              <p className="text-red-500 mt-2">
+                Plan is required
+              </p>
+            )}
+          </div>
 
           {/* Spend input */}
-          <input
-            type="number"
-            {...register("spend")}
-            placeholder="Monthly Spend"
-          />
+          <div>
+            <input
+              type="number"
+              {...register("spend")}
+              placeholder="Monthly Spend"
+              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
+            />
+
+            {errors.spend && (
+              <p className="text-red-500 mt-2">
+                Invalid spend amount
+              </p>
+            )}
+          </div>
 
           {/* Seats input */}
-          <input
-            type="number"
-            {...register("seats")}
-            placeholder="Seats"
-          />
+          <div>
+            <input
+              type="number"
+              {...register("seats")}
+              placeholder="Seats"
+              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
+            />
+
+            {errors.seats && (
+              <p className="text-red-500 mt-2">
+                Seats must be at least 1
+              </p>
+            )}
+          </div>
 
           {/* Team size input */}
-          <input
-            type="number"
-            {...register("teamSize")}
-            placeholder="Team Size"
-          />
+          <div>
+            <input
+              type="number"
+              {...register("teamSize")}
+              placeholder="Team Size"
+              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
+            />
+
+            {errors.teamSize && (
+              <p className="text-red-500 mt-2">
+                Team size must be at least 1
+              </p>
+            )}
+          </div>
 
 
           {/* Use case dropdown */}
-          <select {...register("useCase")}>
+          <div>
+            <select
+              {...register("useCase")}
+              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
+            >
 
-            {/* Default option */}
-            <option value="">
-              Select Use Case
-            </option>
+              {/* Default option */}
+              <option value="">
+                Select Use Case
+              </option>
 
-            {/* Coding option */}
-            <option value="coding">
-              Coding
-            </option>
+              {/* Coding option */}
+              <option value="coding">
+                Coding
+              </option>
 
-            {/* Writing option */}
-            <option value="writing">
-              Writing
-            </option>
+              {/* Writing option */}
+              <option value="writing">
+                Writing
+              </option>
 
-            {/* Research option */}
-            <option value="research">
-              Research
-            </option>
+              {/* Research option */}
+              <option value="research">
+                Research
+              </option>
 
-            {/* Mixed option */}
-            <option value="mixed">
-              Mixed
-            </option>
+              {/* Mixed option */}
+              <option value="mixed">
+                Mixed
+              </option>
 
-          </select>
+            </select>
+
+            {errors.useCase && (
+              <p className="text-red-500 mt-2">
+                Please select a use case
+              </p>
+            )}
+          </div>
 
 
           {/* Submit button */}
-          <button type="submit">
+          <button
+            type="submit"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold hover:scale-105 transition"
+          >
             Run Audit
           </button>
 
@@ -229,22 +309,63 @@ export default function SpendForm() {
       {/* Extra Result Details */}
       {result && (
 
-        <div>
+        <div className="mt-10 bg-zinc-900 p-6 rounded-2xl border border-zinc-800 space-y-4">
 
           {/* Shows tool name */}
-          <p>Tool: {result.tool}</p>
+          <p>
+            <span className="font-bold">
+              Tool:
+            </span>{" "}
+            {result.tool}
+          </p>
 
           {/* Shows current spend */}
-          <p>Spend: ${result.currentSpend}</p>
+          <p>
+            <span className="font-bold">
+              Spend:
+            </span>{" "}
+            ${result.currentSpend}
+          </p>
 
           {/* Shows recommended plan */}
-          <p>Plan: {result.recommendedPlan}</p>
+          <p>
+            <span className="font-bold">
+              Plan:
+            </span>{" "}
+            {result.recommendedPlan}
+          </p>
 
           {/* Shows savings */}
-          <p>Savings: ${result.savings}</p>
+          <p className="text-green-400 font-bold">
+            Savings: ${result.savings}
+          </p>
 
           {/* Shows reason */}
-          <p>{result.reason}</p>
+          <p className="text-zinc-300">
+            {result.reason}
+          </p>
+
+        </div>
+      )}
+
+
+      {/* Public Report Link */}
+      {reportLink && (
+
+        <div className="mt-8 bg-zinc-900 p-6 rounded-2xl border border-zinc-800">
+
+          {/* Report heading */}
+          <h2 className="text-2xl font-bold mb-4">
+            Shareable Report
+          </h2>
+
+          {/* Public report URL */}
+          <a
+            href={reportLink}
+            className="text-blue-400 underline break-all"
+          >
+            {reportLink}
+          </a>
 
         </div>
       )}
