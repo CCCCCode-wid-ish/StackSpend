@@ -110,7 +110,12 @@ export default function SpendForm() {
       },
     ])
     .select()
-    .single();
+     .single();
+   if (savedAudit) {
+  const reportUrl = `/report/${savedAudit.id}`;
+
+  console.log(reportUrl);
+}
 
   console.log(savedAudit);
 };
