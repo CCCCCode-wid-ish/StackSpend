@@ -1,6 +1,42 @@
-## Day 1 — 2026-05-08
 
-**Hours worked:** 5
+## Day 1 — 2026-05-06
+
+**Hours worked:** 1
+
+**What I did:**  
+Read the assignment requirements carefully and explored examples of SaaS audit dashboards. Researched AI tool pricing pages and started planning the project structure.
+
+**What I learned:**  
+The assignment is heavily product-focused and requires balancing engineering with business thinking.
+
+**Blockers / what I'm stuck on:**  
+Spent time understanding the project scope and deciding how to structure the MVP without overengineering it. Also faced some initial confusion around organizing the Next.js App Router structure and deciding how to separate UI components from audit logic cleanly.
+
+**Plan for tomorrow:**  
+Finalize the tech stack and begin frontend setup.
+
+
+## Day 2 — 2026-05-07
+
+**Hours worked:** 2
+
+**What I did:**  
+Reviewed project requirements again and planned the MVP scope. Created rough ideas for the landing page and audit engine flow.
+
+**What I learned:**  
+A clean UX and believable audit reasoning are more important than adding unnecessary features.
+
+**Blockers / what I'm stuck on:**  
+Spent additional time understanding how to structure the audit engine logic cleanly and deciding how to separate reusable UI components from business logic. Also faced some confusion around state persistence and organizing the Next.js App Router architecture efficiently.
+
+
+**Plan for tomorrow:**  
+Start the Next.js project setup and begin building the landing page.
+
+
+## Day 3 — 2026-05-08
+
+**Hours worked:** 4
 
 **What I did:**  
 Started the project setup using Next.js with TypeScript, Tailwind CSS, and App Router. Installed the core dependencies required for the project including Framer Motion, React Hook Form, Zod, Recharts, and Lucide icons.
@@ -28,7 +64,7 @@ Initially got confused because the project was created without a `src` directory
 **Plan for tomorrow:**  
 Build the spend input form with tool selection, pricing inputs, team size, and localStorage persistence. Begin implementing the audit engine logic and pricing data structure.
 
-## Day 2  — 2026-05-09
+## Day 4  — 2026-05-09
 
 **Hours worked:** 4
 
@@ -47,3 +83,36 @@ Initially faced hydration warnings and issues where the form submission appeared
 
 **Plan for tomorrow**
 Improve the audit result dashboard UI with better visual hierarchy and clearer savings breakdown. Start implementing multiple tool support and prepare the structure for backend lead capture and database integration.
+
+
+
+## Day 5 — 2026-05-10
+
+**Hours worked:** 6
+
+**What I did:**  
+Built the audit results dashboard for the AI Spend Audit tool. Added a savings hero section displaying monthly and yearly savings in a visually prominent format. Created a recommendation breakdown card showing the current spend, recommended plan, estimated savings, and reasoning behind the optimization suggestions.
+
+Integrated Recharts to start building data visualizations comparing current AI spend vs optimized spend. Improved the overall dashboard UI with a modern SaaS-style dark theme using gradients, spacing, and card-based layouts.
+
+Connected the audit engine output with the frontend results dashboard so audit results now render dynamically after form submission. Also worked on improving state persistence using localStorage.
+
+**What I learned:**  
+Learned how to structure a reusable dashboard component in React and how to pass audit result data cleanly between components. Understood how chart libraries like Recharts simplify data visualization for SaaS dashboards.
+
+Also learned more about JSX structure and debugging component nesting issues in Next.js.
+
+**Blockers / what I'm stuck on:**  
+Faced hydration warnings and JSX structure issues due to incorrect component nesting and browser-injected attributes. Spent time debugging render issues and fixing component hierarchy.
+
+Still need to complete:
+- AI-generated personalized summary
+- Better chart polish
+- Multi-tool support
+- Shareable public audit URLs
+
+**Plan for tomorrow:**  
+Integrate AI-generated summaries using an LLM API with fallback handling. Improve dashboard polish further and begin backend setup for lead capture and database storage.
+
+
+
