@@ -1,9 +1,29 @@
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 type Props = {
   result: any;
 };
 
 export default function ResultsDashboard({ result }: Props) {
   const annualSavings = result.savings * 12;
+
+  const chartData = [
+    {
+      name: "Current",
+      amount: result.currentSpend,
+    },
+    {
+      name: "Optimized",
+      amount: result.currentSpend - result.savings,
+    },
+  ];
 
   return (
     <div className="mt-12 space-y-8">
@@ -58,6 +78,24 @@ export default function ResultsDashboard({ result }: Props) {
           <p className="text-zinc-300 leading-7">
             {result.reason}
           </p>
+        </div>
+      </div>
+
+      {/* CHART */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+        <h2 className="text-2xl font-bold mb-6">
+          Spend Comparison
+        </h2>
+
+        <div className="h-72">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="amount" radius={[10, 10, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
