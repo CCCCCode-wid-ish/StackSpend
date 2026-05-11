@@ -19,7 +19,9 @@ type Props = {
 // Main dashboard component
 export default function ResultsDashboard({ result }: Props) {
 
-  // Stores AI summary message
+    // Stores AI summary message
+    
+    //FETCH SUMMARY IN DASHBOARD
   const [summary, setSummary] = useState("");
 
   // Runs whenever result data changes
