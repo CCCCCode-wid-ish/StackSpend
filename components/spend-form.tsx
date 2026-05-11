@@ -20,6 +20,8 @@ import { generateAudit } from "@/lib/audit-engine";
 import ResultsDashboard from "./results-dashboard";
 
 
+import { supabase } from "@/lib/supabase";
+
 // Creates validation rules for form fields
 const schema = z.object({
 
@@ -86,19 +88,32 @@ export default function SpendForm() {
 
 
   // Runs when form is submitted
-  const onSubmit = (data: FormData) => {
+ const onSubmit = async (data: FormData) => {
+  const auditResult = generateAudit(data);
 
-    // Generates audit result using form data
-    const auditResult = generateAudit(data);
+  setResult(auditResult);
 
-    // Stores audit result in state
-    setResult(auditResult);
+  localStorage.setItem(
+    "audit-result",
+    JSON.stringify(auditResult)
+  );
 
-    // Saves audit result in browser storage
-    localStorage.setItem(
-      "audit-result",
-      JSON.stringify(auditResult)
-    );
+  const { data: savedAudit, error } = await supabase
+    .from("audits")
+    .insert([
+      {
+        tool: auditResult.tool,
+        current_spend: auditResult.currentSpend,
+        recommended_plan: auditResult.recommendedPlan,
+        savings: auditResult.savings,
+        reason: auditResult.reason,
+      },
+    ])
+    .select()
+    .single();
+
+  console.log(savedAudit);
+};
   };
 
 
