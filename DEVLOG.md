@@ -134,3 +134,49 @@ Complete Supabase database integration and dynamic public report pages. Implemen
 
 
 
+## Day 6 — 2026-05-11
+
+**Hours worked:** 6
+
+**What I did:**  
+Continued improving the AI Spend Audit dashboard and began implementing backend-oriented product features to make the application behave more like a real SaaS platform.
+
+Worked on integrating Supabase for audit report storage and started preparing dynamic public report generation using unique report IDs. Structured the project to support shareable audit URLs and database persistence for audit data.
+
+Improved the frontend dashboard experience by refining the savings hero section, recommendation cards, and analytics layout. Enhanced the chart visualization setup using Recharts to compare current spend versus optimized spend more clearly.
+
+Added localStorage persistence improvements so audit data remains available even after refreshing the page. Continued modularizing the application by separating form handling, dashboard rendering, audit logic, and backend integration into reusable components.
+
+Also implemented lead capture functionality by adding a form to collect user email, company, and role after generating audit results. This prepares the product for future CRM and conversion tracking features.
+
+Additionally, added Open Graph metadata setup for dynamic report pages to improve link previews when sharing audit reports on social platforms.
+
+---
+
+**What I learned:**  
+Learned how frontend dashboards connect with backend services using Supabase and how SaaS applications structure public report systems using dynamic routes.
+
+Improved understanding of state persistence, reusable component architecture, and database-driven workflows in Next.js applications. Also learned more about managing client-side rendering behavior and structuring scalable React applications.
+
+Understood how analytics dashboards combine visualization, business logic, persistence, and routing to create a more production-like user experience.
+
+---
+
+**Blockers / what I'm stuck on:**  
+Encountered issues with Supabase environment variable configuration and dynamic route setup while integrating backend functionality.
+
+Also spent time debugging hydration warnings, JSX nesting issues, and client/server rendering mismatches in Next.js.
+
+Still need to complete:
+- AI-generated personalized summaries
+- Public report page rendering
+- Lead capture database integration (Supabase leads table)
+- Open Graph metadata dynamic testing and optimization
+- Multi-tool audit support
+- Better dashboard responsiveness and chart polish
+
+---
+
+**Plan for tomorrow:**  
+Complete Supabase database integration and dynamic public report pages. Implement lead capture form backend connection to store email, company, and role in the leads table. Continue improving dashboard polish, AI summaries, and overall SaaS-style user experience.
+
