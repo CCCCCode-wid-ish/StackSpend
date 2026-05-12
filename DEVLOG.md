@@ -154,6 +154,7 @@ Additionally, added Open Graph metadata setup for dynamic report pages to improv
 ---
 
 **What I learned:**  
+
 Learned how frontend dashboards connect with backend services using Supabase and how SaaS applications structure public report systems using dynamic routes.
 
 Improved understanding of state persistence, reusable component architecture, and database-driven workflows in Next.js applications. Also learned more about managing client-side rendering behavior and structuring scalable React applications.
