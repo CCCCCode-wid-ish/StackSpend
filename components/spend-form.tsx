@@ -1,8 +1,6 @@
 // Marks this component as a Client Component in Next.js
 "use client";
 
-import { supabase } from "@/lib/supabase";
-
 // Imports React hooks
 import { useEffect, useState } from "react";
 
@@ -93,31 +91,18 @@ export default function SpendForm() {
 
   // Runs when form is submitted
   const onSubmit = async (data: FormData) => {
-  const auditResult = generateAudit(data);
 
-  setResult(auditResult);
+    // Generates audit result
+    const auditResult = generateAudit(data);
 
-  localStorage.setItem(
-    "audit-result",
-    JSON.stringify(auditResult)
-  );
+    // Stores result in state
+    setResult(auditResult);
 
-  const { data: savedAudit, error } = await supabase
-    .from("audits")
-    .insert([
-      {
-        tool: auditResult.tool,
-        current_spend: auditResult.currentSpend,
-        recommended_plan: auditResult.recommendedPlan,
-        savings: auditResult.savings,
-        reason: auditResult.reason,
-      },
-    ])
-    .select()
-    .single();
-
-  console.log(savedAudit);
-};
+    // Saves result to local storage
+    localStorage.setItem(
+      "audit-result",
+      JSON.stringify(auditResult)
+    );
 
     // Saves audit into Supabase database
     const { data: savedAudit, error } = await supabase
@@ -384,6 +369,47 @@ export default function SpendForm() {
 
         </div>
       )}
+
+
+      {/* LEAD CAPTURE FORM */}
+      <div className="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 mt-8">
+
+        <h2 className="text-2xl font-bold mb-6">
+          Get Full Optimization Report
+        </h2>
+
+        <div className="grid gap-4">
+
+          {/* Email Input */}
+          <input
+            type="email"
+            placeholder="Email"
+            className="bg-black border border-zinc-700 p-4 rounded-xl"
+          />
+
+          {/* Company Input */}
+          <input
+            type="text"
+            placeholder="Company"
+            className="bg-black border border-zinc-700 p-4 rounded-xl"
+          />
+
+          {/* Role Input */}
+          <input
+            type="text"
+            placeholder="Role"
+            className="bg-black border border-zinc-700 p-4 rounded-xl"
+          />
+
+          {/* Save Button */}
+          <button
+            className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold"
+          >
+            Save Report
+          </button>
+
+        </div>
+      </div>
 
     </div>
   );
