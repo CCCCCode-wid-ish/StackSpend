@@ -1,6 +1,8 @@
 // Marks this component as a Client Component in Next.js
 "use client";
 
+import { supabase } from "@/lib/supabase";
+
 // Imports React hooks
 import { useEffect, useState } from "react";
 
@@ -91,18 +93,31 @@ export default function SpendForm() {
 
   // Runs when form is submitted
   const onSubmit = async (data: FormData) => {
+  const auditResult = generateAudit(data);
 
-    // Generates audit result
-    const auditResult = generateAudit(data);
+  setResult(auditResult);
 
-    // Stores result in state
-    setResult(auditResult);
+  localStorage.setItem(
+    "audit-result",
+    JSON.stringify(auditResult)
+  );
 
-    // Saves result to local storage
-    localStorage.setItem(
-      "audit-result",
-      JSON.stringify(auditResult)
-    );
+  const { data: savedAudit, error } = await supabase
+    .from("audits")
+    .insert([
+      {
+        tool: auditResult.tool,
+        current_spend: auditResult.currentSpend,
+        recommended_plan: auditResult.recommendedPlan,
+        savings: auditResult.savings,
+        reason: auditResult.reason,
+      },
+    ])
+    .select()
+    .single();
+
+  console.log(savedAudit);
+};
 
     // Saves audit into Supabase database
     const { data: savedAudit, error } = await supabase
