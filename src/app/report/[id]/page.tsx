@@ -1,5 +1,11 @@
 import { supabase } from "@/lib/supabase";
-
+export async function generateMetadata() {
+  return {
+    title: "AI Spend Audit Report",
+    description:
+      "See how much your team can save on AI tools.",
+  };
+}
 export default async function ReportPage({
   params,
 }: {
