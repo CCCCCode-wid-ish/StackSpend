@@ -17,10 +17,6 @@ Experience the deployed application here:
 
 
 ## Screenshots 
-
-
-
-
 ## Dashboard Overview
 
 ![Dashboard](assets/image%201%20of%20stackspend.png)
