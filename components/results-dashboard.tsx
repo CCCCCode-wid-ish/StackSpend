@@ -1,4 +1,5 @@
 "use client";
+import { motion } from "framer-motion";
 
 // Imports React hooks for state and side effects
 import { useEffect, useState } from "react";
@@ -68,7 +69,9 @@ export default function ResultsDashboard({ result }: Props) {
     }
 
     // Calls the fetchSummary function
-    fetchSummary();
+    if (result) {
+      fetchSummary();
+    }
 
   }, [result]);
 
@@ -86,11 +89,13 @@ export default function ResultsDashboard({ result }: Props) {
 
     alert("Lead information saved successfully!");
   }
-if (!result) {
-  return (
-    <div className="animate-pulse bg-zinc-900 h-40 rounded-3xl" />
-  );
-}
+
+  if (!result) {
+    return (
+      <div className="animate-pulse bg-zinc-900 h-40 rounded-3xl" />
+    );
+  }
+
   // Calculates yearly savings
   const annualSavings = result.savings * 12;
 
@@ -114,10 +119,20 @@ if (!result) {
   return (
 
     // Main container with spacing
-    <div className="mt-12 space-y-8">
+    <motion.div
+      className="mt-12 space-y-8"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-700 p-10 rounded-3xl text-white">
+      <motion.div
+        className="bg-gradient-to-r from-blue-600 to-purple-700 p-10 rounded-3xl text-white"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
 
         {/* Savings title */}
         <p className="text-lg opacity-80">
@@ -134,10 +149,15 @@ if (!result) {
           ${annualSavings}/year
         </p>
 
-      </div>
+      </motion.div>
 
       {/* AI Summary Card */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+      <motion.div
+        className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
 
         {/* AI Summary heading */}
         <h2 className="text-2xl font-bold mb-4">
@@ -149,10 +169,15 @@ if (!result) {
           {summary}
         </p>
 
-      </div>
+      </motion.div>
 
       {/* Recommendation Card */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+      <motion.div
+        className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
 
         {/* Recommendation heading */}
         <h2 className="text-2xl font-bold mb-4">
@@ -198,10 +223,15 @@ if (!result) {
 
         </div>
 
-      </div>
+      </motion.div>
 
       {/* Chart Section */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+      <motion.div
+        className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
 
         {/* Chart heading */}
         <h2 className="text-2xl font-bold mb-6">
@@ -238,10 +268,15 @@ if (!result) {
 
         </div>
 
-      </div>
+      </motion.div>
 
       {/* LEAD CAPTURE FORM */}
-      <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+      <motion.div
+        className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
 
         {/* Lead form heading */}
         <h2 className="text-2xl font-bold mb-6">
@@ -284,8 +319,8 @@ if (!result) {
 
         </div>
 
-      </div>
+      </motion.div>
 
-    </div>
+    </motion.div>
   );
 }
