@@ -151,6 +151,23 @@ export default function ResultsDashboard({ result }: Props) {
 
       </motion.div>
 
+       {/* EMPTY STATE FIXED INSIDE RETURN */}
+      {result.savings === 0 && (
+        <motion.div
+          className="bg-zinc-900 p-6 rounded-2xl border border-zinc-800"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h2 className="text-xl font-bold mb-2">
+            Fully Optimized
+          </h2>
+
+          <p className="text-zinc-300">
+            Your stack is already well optimized. No major savings opportunities were detected.
+          </p>
+        </motion.div>
+      )}
+
       {/* AI Summary Card */}
       <motion.div
         className="bg-zinc-900 border border-zinc-800 rounded-3xl p-8"
@@ -324,3 +341,4 @@ export default function ResultsDashboard({ result }: Props) {
     </motion.div>
   );
 }
+
