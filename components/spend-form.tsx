@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 
 // Imports form handling library
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";   // ✅ FIXED (MISSING IMPORT)
 
 // Imports Zod validation library
 import { z } from "zod";
@@ -44,10 +44,8 @@ const schema = z.object({
   useCase: z.string().min(1),
 });
 
-
 // Creates TypeScript type from schema
 type FormData = z.infer<typeof schema>;
-
 
 // Main form component
 export default function SpendForm() {
@@ -60,22 +58,12 @@ export default function SpendForm() {
 
   // Initializes React Hook Form
   const {
-
-    // Registers form inputs
     register,
-
-    // Handles form submission
     handleSubmit,
-
-    // Stores validation errors
     formState: { errors },
-
   } = useForm<FormData>({
-
-    // Uses Zod validation schema
     resolver: zodResolver(schema),
   });
-
 
   // Runs once when component loads
   useEffect(() => {
@@ -87,7 +75,6 @@ export default function SpendForm() {
     if (saved) setResult(JSON.parse(saved));
 
   }, []);
-
 
   // Runs when form is submitted
   const onSubmit = async (data: FormData) => {
@@ -128,20 +115,15 @@ export default function SpendForm() {
     // Creates public report URL
     if (savedAudit) {
 
-      // Generates dynamic report link
       const reportUrl = `/report/${savedAudit.id}`;
 
-      // Stores link in state
       setReportLink(reportUrl);
 
-      // Logs report URL
       console.log(reportUrl);
     }
 
-    // Logs saved audit object
     console.log(savedAudit);
   };
-
 
   // Returns UI content
   return (
@@ -151,225 +133,76 @@ export default function SpendForm() {
 
       {/* Form Section */}
       <form
-
-        // Handles form submit
         onSubmit={handleSubmit(onSubmit)}
-
-        // Form styling
         className="bg-zinc-900 p-8 rounded-3xl border border-zinc-800"
       >
 
-        {/* Form heading */}
         <h2 className="text-3xl font-bold mb-8">
           AI Spend Audit
         </h2>
 
-
-        {/* Input container */}
         <div className="grid gap-6">
 
-          {/* Tool input */}
-          <div>
-            <input
-              {...register("tool")}
-              placeholder="Tool Name"
-              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
-            />
+          <input {...register("tool")} placeholder="Tool Name" className="bg-black border border-zinc-700 p-4 rounded-xl w-full" />
+          {errors.tool && <p className="text-red-500">Tool is required</p>}
 
-            {errors.tool && (
-              <p className="text-red-500 mt-2">
-                Tool is required
-              </p>
-            )}
-          </div>
+          <input {...register("plan")} placeholder="Plan" className="bg-black border border-zinc-700 p-4 rounded-xl w-full" />
+          {errors.plan && <p className="text-red-500">Plan is required</p>}
 
-          {/* Plan input */}
-          <div>
-            <input
-              {...register("plan")}
-              placeholder="Plan"
-              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
-            />
+          <input type="number" {...register("spend")} placeholder="Monthly Spend" className="bg-black border border-zinc-700 p-4 rounded-xl w-full" />
+          {errors.spend && <p className="text-red-500">Invalid spend amount</p>}
 
-            {errors.plan && (
-              <p className="text-red-500 mt-2">
-                Plan is required
-              </p>
-            )}
-          </div>
+          <input type="number" {...register("seats")} placeholder="Seats" className="bg-black border border-zinc-700 p-4 rounded-xl w-full" />
+          {errors.seats && <p className="text-red-500">Seats must be at least 1</p>}
 
-          {/* Spend input */}
-          <div>
-            <input
-              type="number"
-              {...register("spend")}
-              placeholder="Monthly Spend"
-              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
-            />
+          <input type="number" {...register("teamSize")} placeholder="Team Size" className="bg-black border border-zinc-700 p-4 rounded-xl w-full" />
+          {errors.teamSize && <p className="text-red-500">Team size must be at least 1</p>}
 
-            {errors.spend && (
-              <p className="text-red-500 mt-2">
-                Invalid spend amount
-              </p>
-            )}
-          </div>
+          <select {...register("useCase")} className="bg-black border border-zinc-700 p-4 rounded-xl w-full">
+            <option value="">Select Use Case</option>
+            <option value="coding">Coding</option>
+            <option value="writing">Writing</option>
+            <option value="research">Research</option>
+            <option value="mixed">Mixed</option>
+          </select>
 
-          {/* Seats input */}
-          <div>
-            <input
-              type="number"
-              {...register("seats")}
-              placeholder="Seats"
-              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
-            />
-
-            {errors.seats && (
-              <p className="text-red-500 mt-2">
-                Seats must be at least 1
-              </p>
-            )}
-          </div>
-
-          {/* Team size input */}
-          <div>
-            <input
-              type="number"
-              {...register("teamSize")}
-              placeholder="Team Size"
-              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
-            />
-
-            {errors.teamSize && (
-              <p className="text-red-500 mt-2">
-                Team size must be at least 1
-              </p>
-            )}
-          </div>
-
-
-          {/* Use case dropdown */}
-          <div>
-            <select
-              {...register("useCase")}
-              className="bg-black border border-zinc-700 p-4 rounded-xl w-full"
-            >
-
-              {/* Default option */}
-              <option value="">
-                Select Use Case
-              </option>
-
-              {/* Coding option */}
-              <option value="coding">
-                Coding
-              </option>
-
-              {/* Writing option */}
-              <option value="writing">
-                Writing
-              </option>
-
-              {/* Research option */}
-              <option value="research">
-                Research
-              </option>
-
-              {/* Mixed option */}
-              <option value="mixed">
-                Mixed
-              </option>
-
-            </select>
-
-            {errors.useCase && (
-              <p className="text-red-500 mt-2">
-                Please select a use case
-              </p>
-            )}
-          </div>
-
-
-          {/* Submit button */}
-          <button
-            type="submit"
-            className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold hover:scale-105 transition"
-          >
+          <button type="submit" className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold hover:scale-105 transition">
             Run Audit
           </button>
 
         </div>
-
       </form>
 
-
-      {/* Shows dashboard only if result exists */}
+      {/* Dashboard */}
       {result && <ResultsDashboard result={result} />}
-
 
       {/* Extra Result Details */}
       {result && (
-
         <div className="mt-10 bg-zinc-900 p-6 rounded-2xl border border-zinc-800 space-y-4">
 
-          {/* Shows tool name */}
-          <p>
-            <span className="font-bold">
-              Tool:
-            </span>{" "}
-            {result.tool}
-          </p>
-
-          {/* Shows current spend */}
-          <p>
-            <span className="font-bold">
-              Spend:
-            </span>{" "}
-            ${result.currentSpend}
-          </p>
-
-          {/* Shows recommended plan */}
-          <p>
-            <span className="font-bold">
-              Plan:
-            </span>{" "}
-            {result.recommendedPlan}
-          </p>
-
-          {/* Shows savings */}
-          <p className="text-green-400 font-bold">
-            Savings: ${result.savings}
-          </p>
-
-          {/* Shows reason */}
-          <p className="text-zinc-300">
-            {result.reason}
-          </p>
+          <p><b>Tool:</b> {result.tool}</p>
+          <p><b>Spend:</b> ${result.currentSpend}</p>
+          <p><b>Plan:</b> {result.recommendedPlan}</p>
+          <p className="text-green-400 font-bold">Savings: ${result.savings}</p>
+          <p className="text-zinc-300">{result.reason}</p>
 
         </div>
       )}
 
-
-      {/* Public Report Link */}
+      {/* Shareable Report */}
       {reportLink && (
-
         <div className="mt-8 bg-zinc-900 p-6 rounded-2xl border border-zinc-800">
 
-          {/* Report heading */}
           <h2 className="text-2xl font-bold mb-4">
             Shareable Report
           </h2>
 
-          {/* Public report URL */}
-          <a
-            href={reportLink}
-            className="text-blue-400 underline break-all"
-          >
+          <a href={reportLink} className="text-blue-400 underline break-all">
             {reportLink}
           </a>
 
         </div>
       )}
-
 
       {/* LEAD CAPTURE FORM */}
       <div className="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 mt-8">
@@ -380,31 +213,11 @@ export default function SpendForm() {
 
         <div className="grid gap-4">
 
-          {/* Email Input */}
-          <input
-            type="email"
-            placeholder="Email"
-            className="bg-black border border-zinc-700 p-4 rounded-xl"
-          />
+          <input type="email" placeholder="Email" className="bg-black border border-zinc-700 p-4 rounded-xl" />
+          <input type="text" placeholder="Company" className="bg-black border border-zinc-700 p-4 rounded-xl" />
+          <input type="text" placeholder="Role" className="bg-black border border-zinc-700 p-4 rounded-xl" />
 
-          {/* Company Input */}
-          <input
-            type="text"
-            placeholder="Company"
-            className="bg-black border border-zinc-700 p-4 rounded-xl"
-          />
-
-          {/* Role Input */}
-          <input
-            type="text"
-            placeholder="Role"
-            className="bg-black border border-zinc-700 p-4 rounded-xl"
-          />
-
-          {/* Save Button */}
-          <button
-            className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold"
-          >
+          <button className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-xl font-semibold">
             Save Report
           </button>
 
