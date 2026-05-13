@@ -8,16 +8,18 @@ The current build is a Next.js + TypeScript MVP focused on a clear end-to-end fl
 
 GitHub: https://github.com/CCCCCode-wid-ish/StackSpend
 
-## Live Demo
+## 🚀 Live Demo
+
+Experience the deployed application here:  
+👉 https://stackspend-psi.vercel.app/
 
 
-Replace this with your real deployed URL before submission:
-`TODO: add deployed URL`
+
 
 ## Screenshots 
 
 
-# Screenshots
+
 
 ## Dashboard Overview
 
