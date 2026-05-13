@@ -86,7 +86,11 @@ export default function ResultsDashboard({ result }: Props) {
 
     alert("Lead information saved successfully!");
   }
-
+if (!result) {
+  return (
+    <div className="animate-pulse bg-zinc-900 h-40 rounded-3xl" />
+  );
+}
   // Calculates yearly savings
   const annualSavings = result.savings * 12;
 
