@@ -1,74 +1,98 @@
-// src/lib/__tests__/audit-engine.test.ts
-
 import { generateAudit } from "../audit-engine";
 
-//1. Downgrade recommendation test
-test("should recommend downgrade for small team using team plan", () => {
+test("recommends same-vendor downgrade for a tiny team on a team-tier plan", () => {
   const result = generateAudit({
-    tool: "Cursor",
-    plan: "Team",
-    spend: 100,
-    seats: 2,
     teamSize: 2,
     useCase: "coding",
+    tools: [
+      {
+        tool: "cursor",
+        plan: "Business",
+        spend: 80,
+        seats: 2,
+      },
+    ],
   });
 
-  expect(result.recommendedPlan).toBe("Pro");
+  expect(result.tools[0].recommendedPlan).toBe("Pro");
+  expect(result.totalSavings).toBeGreaterThan(0);
 });
 
-//2. Already optimized case
-test("should detect optimized setup", () => {
+test("detects an already optimized low-spend setup honestly", () => {
   const result = generateAudit({
-    tool: "ChatGPT",
-    plan: "Pro",
-    spend: 20,
-    seats: 1,
     teamSize: 1,
     useCase: "writing",
+    tools: [
+      {
+        tool: "chatgpt",
+        plan: "Plus",
+        spend: 20,
+        seats: 1,
+      },
+    ],
   });
 
-  expect(result.savings).toBeGreaterThanOrEqual(0);
+  expect(result.totalSavings).toBe(0);
+  expect(result.headline.toLowerCase()).toContain("optimized");
 });
 
-//3. High savings case
-test("should calculate savings for unused seats", () => {
+test("calculates savings for unused seats", () => {
   const result = generateAudit({
-    tool: "Notion",
-    plan: "Team",
-    spend: 100,
-    seats: 10,
     teamSize: 3,
+    useCase: "coding",
+    tools: [
+      {
+        tool: "github-copilot",
+        plan: "Business",
+        spend: 95,
+        seats: 5,
+      },
+    ],
+  });
+
+  expect(result.tools[0].recommendedAction).toBe("Remove unused seats");
+  expect(result.totalSavings).toBeGreaterThan(0);
+});
+
+test("recommends credits for high API spend", () => {
+  const result = generateAudit({
+    teamSize: 6,
     useCase: "research",
+    tools: [
+      {
+        tool: "openai-api",
+        plan: "API direct",
+        spend: 5000,
+        seats: 1,
+      },
+    ],
   });
 
-  expect(result.savings).toBeGreaterThan(0);
+  expect(result.tools[0].recommendedAction).toContain("credits");
+  expect(result.credexRecommended).toBe(true);
 });
 
-
-//4. Low savings honesty test
-test("should not overestimate savings", () => {
+test("aggregates multi-tool stack savings", () => {
   const result = generateAudit({
-    tool: "Tool",
-    plan: "Pro",
-    spend: 10,
-    seats: 1,
-    teamSize: 1,
-    useCase: "writing",
-  });
-
-  expect(result.savings).toBeLessThanOrEqual(50);
-});
-
-//5. Unused seats test
-test("should detect unused seats", () => {
-  const result = generateAudit({
-    tool: "Figma",
-    plan: "Team",
-    spend: 50,
-    seats: 5,
     teamSize: 2,
-    useCase: "design",
+    useCase: "mixed",
+    tools: [
+      {
+        tool: "chatgpt",
+        plan: "Team",
+        spend: 50,
+        seats: 2,
+      },
+      {
+        tool: "cursor",
+        plan: "Business",
+        spend: 80,
+        seats: 2,
+      },
+    ],
   });
 
-  expect(result.reason.toLowerCase()).toContain("seat");
+  expect(result.tools).toHaveLength(2);
+  expect(result.totalCurrentSpend).toBe(130);
+  expect(result.totalSavings).toBeGreaterThan(0);
 });
